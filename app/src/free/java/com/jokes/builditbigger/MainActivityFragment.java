@@ -1,17 +1,21 @@
 package com.jokes.builditbigger;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -22,6 +26,9 @@ public class MainActivityFragment extends Fragment {
 
     @Bind(R.id.adView)
     AdView mAdView;
+
+
+    private InterstitialAd mInterstitialAd;
 
     public static MainActivityFragment newInstance() {
         MainActivityFragment fragment = new MainActivityFragment();
@@ -36,13 +43,70 @@ public class MainActivityFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+
+
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("DFFD9AE6297B62CCBD027509843436C3")
                 .build();
         mAdView.loadAd(adRequest);
 
 
+
         return view;
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnJoke)
+    public void tellJoke(View view){
+
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId(getActivity().getString(R.string.interstitial_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                openJokesActivity();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                super.onAdFailedToLoad(errorCode);
+                openJokesActivity();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                mInterstitialAd.show();
+            }
+        });
+
+
+        // set the ad unit ID
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+
+        // Load ads into Interstitial Ads
+        mInterstitialAd.loadAd(adRequest);
+
+
+
+    }
+
+    private void openJokesActivity(){
+        Intent i = new Intent(getActivity() , JokeActivity.class);
+        startActivity(i);
     }
 
     @Override

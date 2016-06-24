@@ -20,22 +20,28 @@ android {
 
     productFlavors {
         free {
-
+            applicationId "com.jokes.builditbigger.free"
 
         }
 
         paid {
-
+            applicationId "com.jokes.builditbigger.paid"
         }
     }
+    sourceSets {
+        free { java.srcDirs = ['src/free/java', 'src/free/java/'] }
+        paid { java.srcDirs = ['src/paid/java', 'src/paid/java/'] }
+    }
+
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile project(path: ':backend', configuration: 'android-endpoints')
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    freeCompile 'com.google.android.gms:play-services-ads:7.8.0'
+    compile 'com.android.support:support-v4:23.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
 }
