@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.display.joke.DisplayJokeActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -22,6 +23,7 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class MainActivityFragment extends Fragment {
+
 
 
     @Bind(R.id.adView)
@@ -44,10 +46,9 @@ public class MainActivityFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
-
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("DFFD9AE6297B62CCBD027509843436C3")
-                .build();
+                .addTestDevice("9282635A0855270B5969A49E250D2EFC")  // for nexus 9282635A0855270B5969A49E250D2EFC
+                .build();                                           // for edge DFFD9AE6297B62CCBD027509843436C3
         mAdView.loadAd(adRequest);
 
 
@@ -105,7 +106,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void openJokesActivity(){
-        Intent i = new Intent(getActivity() , JokeActivity.class);
+        Intent i = new Intent(getActivity() , DisplayJokeActivity.class);
         startActivity(i);
     }
 
