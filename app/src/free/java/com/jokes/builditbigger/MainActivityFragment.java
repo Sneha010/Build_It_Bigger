@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.display.joke.DisplayJokeActivity;
-import com.google.android.gms.ads.AdListener;
+import com.display.joke.DisplayJokeFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -22,12 +23,15 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements OnJokeReceiveListener{
 
 
 
     @Bind(R.id.adView)
     AdView mAdView;
+
+    @Bind(R.id.btnJoke)
+    Button btnJoke;
 
 
     private InterstitialAd mInterstitialAd;
@@ -60,7 +64,11 @@ public class MainActivityFragment extends Fragment {
     @OnClick(R.id.btnJoke)
     public void tellJoke(View view){
 
-        mInterstitialAd = new InterstitialAd(getActivity());
+
+        new JokesEndpointAsyncTask(getActivity() , this).execute();
+        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+
+       /* mInterstitialAd = new InterstitialAd(getActivity());
         mInterstitialAd.setAdUnitId(getActivity().getString(R.string.interstitial_ad_unit_id));
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -101,7 +109,7 @@ public class MainActivityFragment extends Fragment {
         // Load ads into Interstitial Ads
         mInterstitialAd.loadAd(adRequest);
 
-
+*/
 
     }
 
@@ -115,4 +123,26 @@ public class MainActivityFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    @Override
+    public void onJokeReceive(String joke) {
+
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.joke_container);
+
+        if(fragment !=null && fragment instanceof DisplayJokeFragment){
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.joke_container , DisplayJokeFragment.newInstance(joke))
+                    .commit();
+            btnJoke.setText("One more joke please!");
+        }else{
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .add(R.id.joke_container , DisplayJokeFragment.newInstance(joke))
+                    .commit();
+
+            btnJoke.setText("Tell another joke");
+        }
+
+
+    }
+
 }

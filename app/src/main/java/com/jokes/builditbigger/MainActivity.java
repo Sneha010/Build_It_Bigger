@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(getString(R.string.app_name));
 
-        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.main_container , MainActivityFragment.newInstance())
                 .commit();

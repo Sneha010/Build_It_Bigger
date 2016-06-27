@@ -2,12 +2,11 @@ package com.jokes.builditbigger;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Pair;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.myapplication.backend.myApi.MyApi;
+import com.myapplication.backend.myJokesApi.MyJokesApi;
 
 import java.io.IOException;
 
@@ -15,12 +14,18 @@ import java.io.IOException;
  * Created by Sneha Khadatare : 587823
  * on 6/22/2016.
  */
-class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
-    private static MyApi myApiService = null;
+class JokesEndpointAsyncTask extends AsyncTask<Void, Void, String> {
+    private static MyJokesApi myApiService = null;
     private Context context;
+    private OnJokeReceiveListener mOnJokeReceiveListener;
+
+    public JokesEndpointAsyncTask(Context context , OnJokeReceiveListener jokeReceiveListener) {
+        this.context = context;
+        mOnJokeReceiveListener = jokeReceiveListener;
+    }
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Void... params) {
         if(myApiService == null) {  // Only do this once
            /* MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -36,17 +41,15 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
                     });*/
             // end options for devappserver
 
-            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+            MyJokesApi.Builder builder = new MyJokesApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://gcetry.appspot.com/_ah/api/");
 
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String name = params[0].second;
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.fetchJoke().execute().getJoke();
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -55,5 +58,7 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
     @Override
     protected void onPostExecute(String result) {
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+
+        mOnJokeReceiveListener.onJokeReceive(result);
     }
 }
