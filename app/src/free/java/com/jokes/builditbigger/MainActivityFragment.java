@@ -1,19 +1,19 @@
 package com.jokes.builditbigger;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
-import com.display.joke.DisplayJokeActivity;
 import com.display.joke.DisplayJokeFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.myapplication.backend.myJokesApi.model.JokeBean;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,8 +33,11 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
     @Bind(R.id.btnJoke)
     Button btnJoke;
 
+    @Bind(R.id.progressBar)
+    ProgressBar mProgressBar;
 
-    private InterstitialAd mInterstitialAd;
+    @Bind(R.id.joke_container)
+    LinearLayout llJokeContainer;
 
     public static MainActivityFragment newInstance() {
         MainActivityFragment fragment = new MainActivityFragment();
@@ -64,59 +67,16 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
     @OnClick(R.id.btnJoke)
     public void tellJoke(View view){
 
+        mProgressBar.setVisibility(View.VISIBLE);
+        llJokeContainer.setVisibility(View.GONE);
 
         new JokesEndpointAsyncTask(getActivity() , this).execute();
-        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-
-       /* mInterstitialAd = new InterstitialAd(getActivity());
-        mInterstitialAd.setAdUnitId(getActivity().getString(R.string.interstitial_ad_unit_id));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                openJokesActivity();
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                super.onAdFailedToLoad(errorCode);
-                openJokesActivity();
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                super.onAdLeftApplication();
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-            }
-
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                mInterstitialAd.show();
-            }
-        });
 
 
-        // set the ad unit ID
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
 
-        // Load ads into Interstitial Ads
-        mInterstitialAd.loadAd(adRequest);
-
-*/
 
     }
 
-    private void openJokesActivity(){
-        Intent i = new Intent(getActivity() , DisplayJokeActivity.class);
-        startActivity(i);
-    }
 
     @Override
     public void onDestroyView() {
@@ -125,18 +85,29 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
     }
 
     @Override
-    public void onJokeReceive(String joke) {
+    public void onJokeReceive(JokeBean joke) {
+
+        mProgressBar.setVisibility(View.GONE);
+        llJokeContainer.setVisibility(View.VISIBLE);
+
+        String message = null;
+
+        if(joke !=null && joke.getJokeId() != 0){
+            message = joke.getJoke();
+        }else{
+            message = getString(R.string.error_joke);
+        }
 
         Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.joke_container);
 
         if(fragment !=null && fragment instanceof DisplayJokeFragment){
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.joke_container , DisplayJokeFragment.newInstance(joke))
+                    .replace(R.id.joke_container , DisplayJokeFragment.newInstance(message))
                     .commit();
             btnJoke.setText("One more joke please!");
         }else{
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .add(R.id.joke_container , DisplayJokeFragment.newInstance(joke))
+                    .add(R.id.joke_container , DisplayJokeFragment.newInstance(message))
                     .commit();
 
             btnJoke.setText("Tell another joke");
