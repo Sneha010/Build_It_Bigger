@@ -1,4 +1,4 @@
-package atry.gce.com.gcetry;
+package com.jokes.builditbigger;
 
 import org.junit.Test;
 

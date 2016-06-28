@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.display.joke.DisplayJokeFragment;
 import com.google.android.gms.ads.AdRequest;
@@ -31,7 +31,7 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
     AdView mAdView;
 
     @Bind(R.id.btnJoke)
-    Button btnJoke;
+    TextView btnJoke;
 
     @Bind(R.id.progressBar)
     ProgressBar mProgressBar;

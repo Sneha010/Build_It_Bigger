@@ -28,7 +28,7 @@ public class JokeEndpoint {
     @ApiMethod(name = "fetchJoke")
     public JokeBean fetchJoke() {
 
-        Joke jokeBean = new TellMeJoke().getJoke();
+        Joke jokeBean = TellMeJoke.getJoke();
         JokeBean response = new JokeBean(jokeBean.getJokeString() , jokeBean.getJokeId());
 
         return response;

@@ -3,9 +3,6 @@ package com.jokes.builditbigger;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.myapplication.backend.myJokesApi.MyJokesApi;
@@ -21,7 +18,6 @@ public class JokesEndpointAsyncTask extends AsyncTask<Void, Void, JokeBean> {
     private static MyJokesApi myApiService = null;
     private Context context;
     private OnJokeReceiveListener mOnJokeReceiveListener;
-    private InterstitialAd mInterstitialAd;
 
     public JokesEndpointAsyncTask(Context context , OnJokeReceiveListener jokeReceiveListener) {
         this.context = context;
@@ -62,34 +58,7 @@ public class JokesEndpointAsyncTask extends AsyncTask<Void, Void, JokeBean> {
     @Override
     protected void onPostExecute(final JokeBean result) {
 
-        mInterstitialAd = new InterstitialAd(context);
-        mInterstitialAd.setAdUnitId(context.getString(R.string.interstitial_ad_unit_id));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                mOnJokeReceiveListener.onJokeReceive(result);
-            }
-
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                mInterstitialAd.show();
-            }
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                super.onAdFailedToLoad(errorCode);
-                mOnJokeReceiveListener.onJokeReceive(result);
-            }
-
-        });
-
-        // set the ad unit ID
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        // Load ads into Interstitial Ads
-        mInterstitialAd.loadAd(adRequest);
+        mOnJokeReceiveListener.onJokeReceive(result);
 
     }
 }
