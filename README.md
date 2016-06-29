@@ -1,11 +1,13 @@
 ### Build It Bigger : Joke Telling App
 
-    It is Joke telling app developed with free/paid flavors that uses multiple libraries and Google Cloud Endpoints. App consist of four modules:
+    It is Joke telling app developed with free/paid flavors that uses multiple libraries 
+    and Google Cloud Endpoints. App consist of four modules:
     
     1. A Java library that provides jokes
     2. A Google Cloud Endpoints (GCE) project that serves those jokes
     3. An Android Library containing an activity/Fragment for displaying jokes
-    4. An Android app that fetches jokes from the GCE module and passes them to the Android Library for display
+    4. An Android app that fetches jokes from the GCE module and passes them 
+    to the Android Library for display
     
 #### Screenshot
 
@@ -13,7 +15,7 @@
 
 ##### Note 
 
-    Please add your Banner and Interstitial Ad Id in strings.xml of free version of app. 
+    Please add your Banner and Interstitial Ad Id in strings.xml of free version of an app. 
 
 
 ### License
