@@ -3,6 +3,8 @@ package com.jokes.builditbigger;
 import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.myapplication.backend.myJokesApi.model.JokeBean;
 
@@ -37,7 +39,9 @@ public class CheckForNonEmptyString extends AndroidTestCase {
             JokesEndpointAsyncTask myJokeAsyntask =
                     new JokesEndpointAsyncTask(mContext ,new TestJokesReceiveListener());
             myJokeAsyntask.execute();
-            boolean isSuccess = mSignal.await(10 , TimeUnit.SECONDS);
+
+            boolean isSuccess = mSignal.await(5 , TimeUnit.SECONDS);
+
             if(!isSuccess){
                 fail("Could not connect to server!");
             }
@@ -53,8 +57,9 @@ public class CheckForNonEmptyString extends AndroidTestCase {
         @Override
         public void onJokeReceive(JokeBean joke) {
 
+            Log.d("@@@", "onJokeReceive: ");
             mSignal.countDown();
-            assertNotNull(joke.getJoke());
+            assertFalse(TextUtils.isEmpty(joke.getJoke()));
         }
     }
 }
