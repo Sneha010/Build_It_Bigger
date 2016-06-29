@@ -54,8 +54,7 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
 
 
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("9282635A0855270B5969A49E250D2EFC")  // for nexus 9282635A0855270B5969A49E250D2EFC
-                .build();                                           // for edge DFFD9AE6297B62CCBD027509843436C3
+                .build();
         mAdView.loadAd(adRequest);
 
 
@@ -71,10 +70,6 @@ public class MainActivityFragment extends Fragment implements OnJokeReceiveListe
         llJokeContainer.setVisibility(View.GONE);
 
         new JokesEndpointAsyncTask(getActivity() , this).execute();
-
-
-
-
     }
 
 

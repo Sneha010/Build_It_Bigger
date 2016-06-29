@@ -11,6 +11,10 @@
 
 ![Joke](/screenshots/joke.png?raw=true "Joke")
 
+##### Note 
+
+    Please add your Banner and Interstitial Ad Id in strings.xml of free version of app. 
+
 
 ### License
 
