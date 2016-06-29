@@ -4,7 +4,6 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.myapplication.backend.myJokesApi.model.JokeBean;
 
@@ -57,9 +56,8 @@ public class CheckForNonEmptyString extends AndroidTestCase {
         @Override
         public void onJokeReceive(JokeBean joke) {
 
-            Log.d("@@@", "onJokeReceive: ");
-            mSignal.countDown();
             assertFalse(TextUtils.isEmpty(joke.getJoke()));
+            mSignal.countDown();
         }
     }
 }
